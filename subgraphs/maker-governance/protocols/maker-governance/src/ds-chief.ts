@@ -62,14 +62,14 @@ export function handleLock(event: LogNote): void {
     }
   }
 
-  const delegateVPChange = createDelegateVotingPowerChange(
-    event,
-    delegate.votingPowerRaw,
-    delegate.votingPowerRaw.plus(amount),
-    delegate.id,
-    sender.toHexString()
-  );
-  delegateVPChange.save();
+  // const delegateVPChange = createDelegateVotingPowerChange(
+  //   event,
+  //   delegate.votingPowerRaw,
+  //   delegate.votingPowerRaw.plus(amount),
+  //   delegate.id,
+  //   sender.toHexString()
+  // );
+  // delegateVPChange.save();
 
   delegate.votingPowerRaw = delegate.votingPowerRaw.plus(amount);
   delegate.votingPower = delegate.votingPower.plus(toDecimal(amount));
@@ -90,14 +90,14 @@ export function handleFree(event: LogNote): void {
 
   const delegate = getDelegate(sender.toHexString());
 
-  const delegateVPChange = createDelegateVotingPowerChange(
-    event,
-    delegate.votingPowerRaw,
-    delegate.votingPowerRaw.minus(amount),
-    delegate.id,
-    sender.toHexString()
-  );
-  delegateVPChange.save();
+  // const delegateVPChange = createDelegateVotingPowerChange(
+  //   event,
+  //   delegate.votingPowerRaw,
+  //   delegate.votingPowerRaw.minus(amount),
+  //   delegate.id,
+  //   sender.toHexString()
+  // );
+  // delegateVPChange.save();
 
   delegate.votingPowerRaw = delegate.votingPowerRaw.minus(amount);
   delegate.votingPower = delegate.votingPower.minus(toDecimal(amount));
