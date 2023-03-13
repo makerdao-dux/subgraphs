@@ -66,7 +66,8 @@ export function handleLock(event: LogNote): void {
     event,
     delegate.votingPowerRaw,
     delegate.votingPowerRaw.plus(amount),
-    delegate.id
+    delegate.id,
+    sender.toHexString()
   );
   delegateVPChange.save();
 
@@ -93,7 +94,8 @@ export function handleFree(event: LogNote): void {
     event,
     delegate.votingPowerRaw,
     delegate.votingPowerRaw.minus(amount),
-    delegate.id
+    delegate.id,
+    sender.toHexString()
   );
   delegateVPChange.save();
 
