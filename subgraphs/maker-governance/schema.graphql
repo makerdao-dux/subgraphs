@@ -135,9 +135,9 @@ type Delegate @entity {
   numberVotes: Int!
 
   "Poll votes associated to this spell"
-  poleVotes: [PollVote!]! @derivedFrom(field: "voter")
+  pollVotes: [PollVote!]! @derivedFrom(field: "voter")
   "Number of spells voted on"
-  numberPoleVotes: Int!
+  numberPollVotes: Int!
 }
 type Delegation @entity {
   "delegate-delegator"
@@ -216,5 +216,5 @@ type Poll @entity {
   "Poll's id"
   id: String!
   "Poll votes associated to this spell"
-  polevotes: [PollVote!]! @derivedFrom(field: "poll")
+  pollVotes: [PollVote!]! @derivedFrom(field: "poll")
 }
