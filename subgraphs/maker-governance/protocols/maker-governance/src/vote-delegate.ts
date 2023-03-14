@@ -21,7 +21,7 @@ export function handleDelegateLock(event: Lock): void {
     delegate.delegations = delegate.delegations.concat([delegationID]);
   }
   if (delegation.amount.equals(BIGINT_ZERO)) {
-    delegate.tokenHoldersRepresented = delegate.tokenHoldersRepresented + 1;
+    delegate.delegators = delegate.delegators + 1;
   }
 
   const delegateVPChange = createDelegateVotingPowerChange(
@@ -64,7 +64,7 @@ export function handleDelegateFree(event: Free): void {
 
   delegation.amount = delegation.amount.minus(event.params.wad);
   if (delegation.amount.equals(BIGINT_ZERO)) {
-    delegate.tokenHoldersRepresented = delegate.tokenHoldersRepresented - 1;
+    delegate.delegators = delegate.delegators - 1;
   }
   delegation.save();
   delegate.save();

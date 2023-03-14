@@ -147,3 +147,22 @@ templates:
         - event: Free(indexed address,uint256)
           handler: handleDelegateFree
       file: ./protocols/maker-governance/src/vote-delegate.ts
+  - kind: ethereum
+    name: DelegateFactory
+    network: mainnet
+    source:
+      address: "0xD897F108670903D1d6070fcf818f9db3615AF272"
+      abi: DelegateFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - CreateVoteDelegate
+      abis:
+        - name: DelegateFactory
+          file: ./abis/maker-governance/DelegateFactory.json
+      eventHandlers:
+        - event: CreateVoteDelegate(indexed address,indexed address)
+          handler: handleCreateVoteDelegate
+      file: ./protocols/maker-governance/src/delegate-factory.ts

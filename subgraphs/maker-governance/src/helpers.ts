@@ -52,7 +52,7 @@ export function getDelegate(address: string): Delegate {
     delegate.votingPowerRaw = BIGINT_ZERO;
     delegate.votingPower = BIGDECIMAL_ZERO;
     delegate.delegations = [];
-    delegate.tokenHoldersRepresented = 0;
+    delegate.delegators = 0;
     delegate.currentSpells = [];
     delegate.numberVotes = 0;
     delegate.numberPollVotes = 0;

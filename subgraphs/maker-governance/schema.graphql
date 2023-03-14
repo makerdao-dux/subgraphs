@@ -124,7 +124,7 @@ type Delegate @entity {
   "Delegations that this contract has received"
   delegations: [Delegation!]!
   "Number of token holders delegate represents"
-  tokenHoldersRepresented: Int!
+  delegators: Int!
 
   "Current slate of spells delegate is voting for"
   currentSpells: [Spell!]!
@@ -139,6 +139,7 @@ type Delegate @entity {
   "Number of spells voted on"
   numberPollVotes: Int!
 }
+
 type Delegation @entity {
   "delegate-delegator"
   id: String!
