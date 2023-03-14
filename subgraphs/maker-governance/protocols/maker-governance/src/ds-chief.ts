@@ -26,6 +26,7 @@ import {
 } from "../../../src/helpers";
 import { VoteDelegate as VoteDelegateTemplate } from "../../../generated/templates";
 
+
 export function handleLock(event: LogNote): void {
   const sender = event.params.guy; // guy is the sender
   const amountStr = hexToNumberString(event.params.foo.toHexString());
@@ -39,7 +40,7 @@ export function handleLock(event: LogNote): void {
     delegate.votingPowerRaw = BIGINT_ZERO;
     delegate.votingPower = BIGDECIMAL_ZERO;
     delegate.delegations = [];
-    delegate.tokenHoldersRepresented = 0;
+    delegate.delegators = 0;
     delegate.currentSpells = [];
     delegate.numberVotes = 0;
     delegate.numberPollVotes = 0;
