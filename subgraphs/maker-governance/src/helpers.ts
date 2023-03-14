@@ -55,7 +55,7 @@ export function getDelegate(address: string): Delegate {
     delegate.tokenHoldersRepresented = 0;
     delegate.currentSpells = [];
     delegate.numberVotes = 0;
-    delegate.numberPoleVotes = 0;
+    delegate.numberPollVotes = 0;
   }
   return delegate;
 }
@@ -64,7 +64,8 @@ export function createDelegateVotingPowerChange(
   event: ethereum.Event,
   previousBalance: BigInt,
   newBalance: BigInt,
-  delegate: string
+  delegate: string,
+  sender: string
 ): DelegateVotingPowerChange {
   const delegateVotingPwerChangeId = `${event.block.timestamp.toI64()}-${
     event.logIndex
@@ -75,6 +76,7 @@ export function createDelegateVotingPowerChange(
   delegateVPChange.previousBalance = previousBalance;
   delegateVPChange.newBalance = newBalance;
   delegateVPChange.delegate = delegate;
+  delegateVPChange.sender = sender;
   delegateVPChange.tokenAddress = event.address.toHexString();
   delegateVPChange.txnHash = event.transaction.hash.toHexString();
   delegateVPChange.blockTimestamp = event.block.timestamp;

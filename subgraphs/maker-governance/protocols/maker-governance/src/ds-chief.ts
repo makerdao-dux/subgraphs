@@ -42,7 +42,7 @@ export function handleLock(event: LogNote): void {
     delegate.tokenHoldersRepresented = 0;
     delegate.currentSpells = [];
     delegate.numberVotes = 0;
-    delegate.numberPoleVotes = 0;
+    delegate.numberPollVotes = 0;
 
     // Check if vote delegate contract by calling chief()
     const voteDelegate = VoteDelegate.bind(sender);
@@ -62,13 +62,14 @@ export function handleLock(event: LogNote): void {
     }
   }
 
-  const delegateVPChange = createDelegateVotingPowerChange(
-    event,
-    delegate.votingPowerRaw,
-    delegate.votingPowerRaw.plus(amount),
-    delegate.id
-  );
-  delegateVPChange.save();
+  // const delegateVPChange = createDelegateVotingPowerChange(
+  //   event,
+  //   delegate.votingPowerRaw,
+  //   delegate.votingPowerRaw.plus(amount),
+  //   delegate.id,
+  //   sender.toHexString()
+  // );
+  // delegateVPChange.save();
 
   delegate.votingPowerRaw = delegate.votingPowerRaw.plus(amount);
   delegate.votingPower = delegate.votingPower.plus(toDecimal(amount));
@@ -89,13 +90,14 @@ export function handleFree(event: LogNote): void {
 
   const delegate = getDelegate(sender.toHexString());
 
-  const delegateVPChange = createDelegateVotingPowerChange(
-    event,
-    delegate.votingPowerRaw,
-    delegate.votingPowerRaw.minus(amount),
-    delegate.id
-  );
-  delegateVPChange.save();
+  // const delegateVPChange = createDelegateVotingPowerChange(
+  //   event,
+  //   delegate.votingPowerRaw,
+  //   delegate.votingPowerRaw.minus(amount),
+  //   delegate.id,
+  //   sender.toHexString()
+  // );
+  // delegateVPChange.save();
 
   delegate.votingPowerRaw = delegate.votingPowerRaw.minus(amount);
   delegate.votingPower = delegate.votingPower.minus(toDecimal(amount));

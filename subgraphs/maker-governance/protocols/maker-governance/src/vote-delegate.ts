@@ -28,7 +28,8 @@ export function handleDelegateLock(event: Lock): void {
     event,
     delegation.amount,
     delegation.amount.plus(event.params.wad),
-    delegate.id
+    delegate.id,
+    sender
   );
   delegateVPChange.save();
 
@@ -56,7 +57,8 @@ export function handleDelegateFree(event: Free): void {
     event,
     delegation.amount,
     delegation.amount.minus(event.params.wad),
-    delegate.id
+    delegate.id,
+    sender
   );
   delegateVPChange.save();
 

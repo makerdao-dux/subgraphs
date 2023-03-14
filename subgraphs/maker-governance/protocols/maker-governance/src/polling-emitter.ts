@@ -8,7 +8,7 @@ export function handlePollVote(event: Voted): void {
   const optionId = event.params.optionId;
 
   const delegate = getDelegate(voter);
-  delegate.numberPoleVotes = delegate.numberPoleVotes + 1;
+  delegate.numberPollVotes = delegate.numberPollVotes + 1;
   delegate.save();
 
   let poll = Poll.load(pollId);
