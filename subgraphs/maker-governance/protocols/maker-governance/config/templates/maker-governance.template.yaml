@@ -7,9 +7,9 @@ dataSources:
     name: DSChief
     network: {{ network }}
     source:
-      address: "{{ governorContractAddress }}"
+      address: "{{ dsChiefContractAddress }}"
       abi: DSChief
-      startBlock: {{ governorContractStartBlock }}
+      startBlock: {{ dsChiefContractStartBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
