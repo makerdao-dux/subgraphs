@@ -25,11 +25,11 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
 
   if (!admin) {
     admin = new DelegateAdmin(delegateAdminAddress);
-    admin.voteDelegate = event.params.voteDelegate;
+    admin.voteDelegate = event.params.voteDelegate.toHex();
     admin.save();
   }
 
-  const delegate = new Delegate(event.params.voteDelegate);
+  const delegate = new Delegate(event.params.voteDelegate.toHex());
   delegate.isVoteDelegate = false;
   delegate.votingPowerRaw = BIGINT_ZERO;
   delegate.votingPower = BIGDECIMAL_ZERO;
