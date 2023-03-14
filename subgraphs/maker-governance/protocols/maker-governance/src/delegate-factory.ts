@@ -1,9 +1,9 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt } from "@graphprotocol/graph-ts";
 import {
   DelegateFactory,
-  CreateVoteDelegate
-} from "../generated/DelegateFactory/DelegateFactory"
-import { VoteDelegate, DelegateAdmin, Delegate } from "../generated/schema"
+  CreateVoteDelegate,
+} from "../../../generated/DelegateFactory/DelegateFactory";
+import { DelegateAdmin, Delegate } from "../../../generated/schema";
 import {
   BIGDECIMAL_ZERO,
   BIGINT_ONE,
@@ -20,13 +20,13 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
   // TODO: Create the delegate contract and assign the delegate admin.
   // https://etherscan.io/address/0xD897F108670903D1d6070fcf818f9db3615AF272#code
   // event.params.delegate and event.transcation.from.toHex() should be the same
-  const delegateAdminAddress = event.transaction.from.toHex()
-  let admin = DelegateAdmin.load(delegateAdminAddress)
+  const delegateAdminAddress = event.transaction.from.toHex();
+  let admin = DelegateAdmin.load(delegateAdminAddress);
 
   if (!admin) {
-    admin = new DelegateAdmin(delegateAdminAddress)
-    admin.voteDelegate = event.params.voteDelegate
-    admin.save()
+    admin = new DelegateAdmin(delegateAdminAddress);
+    admin.voteDelegate = event.params.voteDelegate;
+    admin.save();
   }
 
   const delegate = new Delegate(event.params.voteDelegate);
@@ -42,7 +42,7 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
 
   delegate.save();
 
-  const framework = getGovernanceFramework('TODO: DSChief address');
+  const framework = getGovernanceFramework("TODO: DSChief address");
   framework.totalDelegates = framework.totalDelegates + 1;
   framework.save();
 
