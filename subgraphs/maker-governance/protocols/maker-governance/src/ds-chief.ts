@@ -1,6 +1,6 @@
 import { BigInt, Bytes, Address, ethereum, log } from "@graphprotocol/graph-ts";
 import { LogNote, Etch } from "../../../generated/DSChief/DSChief";
-import { ExecutiveVote, Slate, Spell } from "../../../generated/schema";
+import { ExecutiveVote, Slate, Spell, Voter } from "../../../generated/schema";
 import { BIGINT_ONE, SpellState } from "../../../src/constants";
 import {
   addWeightToSpells,
@@ -88,20 +88,20 @@ export function handleEtch(event: Etch): void {
   const to = event.transaction.to;
   // Check if txn is not directly to Chief, it's either to vote delegate or multi-sig + delegate
   if (to && to != event.address) {
-    const fromAdmin = DelegateAdmin.load(sender);
+    const fromAdmin = Voter.load(sender);
     if (!fromAdmin) {
-      const toAdmin = DelegateAdmin.load(to.toHexString());
+      const toAdmin = Voter.load(to.toHexString());
       if (!toAdmin) {
         log.error("Etch not trigger by a delegate admin. TxnHash: {}", [
           event.transaction.hash.toHexString(),
         ]);
       } else {
         // Txn sent via a proxy/multi-sig to vote delegate
-        sender = toAdmin.voteDelegate!;
+        sender = toAdmin.delegateContract!;
       }
     } else {
       // Txn sent to vote delegate
-      sender = fromAdmin.voteDelegate!;
+      sender = fromAdmin.delegateContract!;
     }
   }
   const slateID = event.params.slate;
