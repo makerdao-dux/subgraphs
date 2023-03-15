@@ -1,15 +1,10 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+// import { BigInt } from '@graphprotocol/graph-ts';
 import {
-  DelegateFactory,
+  // DelegateFactory,
   CreateVoteDelegate,
 } from "../../../generated/DelegateFactory/DelegateFactory";
 import { DelegateAdmin, Delegate } from "../../../generated/schema";
-import {
-  BIGDECIMAL_ZERO,
-  BIGINT_ONE,
-  BIGINT_ZERO,
-  SpellState,
-} from "../../../src/constants";
+import { BIGDECIMAL_ZERO, BIGINT_ZERO, CHIEF } from "../../../src/constants";
 import { getGovernanceFramework } from "../../../src/helpers";
 
 export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
@@ -25,11 +20,11 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
 
   if (!admin) {
     admin = new DelegateAdmin(delegateAdminAddress);
-    admin.voteDelegate = event.params.voteDelegate;
+    admin.voteDelegate = event.params.voteDelegate.toHexString();
     admin.save();
   }
 
-  const delegate = new Delegate(event.params.voteDelegate);
+  const delegate = new Delegate(event.params.voteDelegate.toHexString());
   delegate.isVoteDelegate = false;
   delegate.votingPowerRaw = BIGINT_ZERO;
   delegate.votingPower = BIGDECIMAL_ZERO;
@@ -42,7 +37,7 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
 
   delegate.save();
 
-  const framework = getGovernanceFramework("TODO: DSChief address");
+  const framework = getGovernanceFramework(CHIEF);
   framework.totalDelegates = framework.totalDelegates + 1;
   framework.save();
 
