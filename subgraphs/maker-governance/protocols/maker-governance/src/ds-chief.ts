@@ -26,7 +26,6 @@ import {
 } from "../../../src/helpers";
 import { VoteDelegate as VoteDelegateTemplate } from "../../../generated/templates";
 
-
 export function handleLock(event: LogNote): void {
   const sender = event.params.guy; // guy is the sender
   const amountStr = hexToNumberString(event.params.foo.toHexString());
@@ -36,7 +35,6 @@ export function handleLock(event: LogNote): void {
   let delegate = Delegate.load(sender.toHexString());
   if (!delegate) {
     delegate = new Delegate(sender.toHexString());
-    delegate.isVoteDelegate = false;
     delegate.votingPowerRaw = BIGINT_ZERO;
     delegate.votingPower = BIGDECIMAL_ZERO;
     delegate.delegations = [];
