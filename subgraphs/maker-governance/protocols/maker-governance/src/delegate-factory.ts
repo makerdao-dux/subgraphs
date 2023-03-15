@@ -1,6 +1,10 @@
-import { CreateVoteDelegate } from "../../../generated/DelegateFactory/DelegateFactory";
+// import { BigInt } from '@graphprotocol/graph-ts';
+import {
+  // DelegateFactory,
+  CreateVoteDelegate,
+} from "../../../generated/DelegateFactory/DelegateFactory";
 import { Delegate, Voter } from "../../../generated/schema";
-import { BIGDECIMAL_ZERO, BIGINT_ZERO } from "../../../src/constants";
+import { BIGDECIMAL_ZERO, BIGINT_ZERO, CHIEF } from "../../../src/constants";
 import { getGovernanceFramework } from "../../../src/helpers";
 
 export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
@@ -33,7 +37,7 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
 
   voter.save();
 
-  const framework = getGovernanceFramework("TODO: DSChief address");
+  const framework = getGovernanceFramework(CHIEF);
   framework.totalDelegates = framework.totalDelegates + 1;
   framework.save();
 }
