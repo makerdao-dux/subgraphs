@@ -1,10 +1,10 @@
 import { BigDecimal, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import {
-  Delegate,
   GovernanceFramework,
   Spell,
   Slate,
-  DelegateVotingPowerChange,
+  ChiefLockedMKRChange,
+  Voter,
 } from "../generated/schema";
 import { DSChief } from "../generated/DSChief/DSChief";
 import { DSSpell } from "../generated/DSChief/DSSpell";
@@ -44,45 +44,37 @@ export function toDecimal(value: BigInt, decimals: number = 18): BigDecimal {
   );
 }
 
-export function getDelegate(address: string): Delegate {
-  let delegate = Delegate.load(address);
-  if (!delegate) {
-    delegate = new Delegate(address);
-    delegate.isVoteDelegate = false;
-    delegate.votingPowerRaw = BIGINT_ZERO;
-    delegate.votingPower = BIGDECIMAL_ZERO;
-    delegate.delegations = [];
-    delegate.delegators = 0;
-    delegate.currentSpells = [];
-    delegate.numberVotes = 0;
-    delegate.numberPollVotes = 0;
+export function getVoter(address: string): Voter {
+  let voter = Voter.load(address);
+  if (!voter) {
+    voter = new Voter(address);
+    voter.isVoteDelegate = false;
+    voter.mkrLockedInChiefRaw = BIGINT_ZERO;
+    voter.mkrLockedInChief = BIGDECIMAL_ZERO;
+    voter.currentSpells = [];
+    voter.numberExecutiveVotes = 0;
+    voter.numberPollVotes = 0;
   }
-  return delegate;
+  return voter;
 }
 
-export function createDelegateVotingPowerChange(
+export function createChiefLockedMKRChange(
   event: ethereum.Event,
   previousBalance: BigInt,
   newBalance: BigInt,
-  delegate: string,
-  sender: string
-): DelegateVotingPowerChange {
-  const delegateVotingPwerChangeId = `${event.block.timestamp.toI64()}-${
-    event.logIndex
-  }`;
-  const delegateVPChange = new DelegateVotingPowerChange(
-    delegateVotingPwerChangeId
-  );
-  delegateVPChange.previousBalance = previousBalance;
-  delegateVPChange.newBalance = newBalance;
-  delegateVPChange.delegate = delegate;
-  delegateVPChange.sender = sender;
-  delegateVPChange.tokenAddress = event.address.toHexString();
-  delegateVPChange.txnHash = event.transaction.hash.toHexString();
-  delegateVPChange.blockTimestamp = event.block.timestamp;
-  delegateVPChange.logIndex = event.logIndex;
-  delegateVPChange.blockNumber = event.block.number;
-  return delegateVPChange;
+  voter: string
+): ChiefLockedMKRChange {
+  const id = `${event.block.timestamp.toI64()}-${event.logIndex}`;
+  const chiefMKRChange = new ChiefLockedMKRChange(id);
+  chiefMKRChange.previousBalance = previousBalance;
+  chiefMKRChange.newBalance = newBalance;
+  chiefMKRChange.voter = voter;
+  chiefMKRChange.tokenAddress = event.address.toHexString();
+  chiefMKRChange.txnHash = event.transaction.hash.toHexString();
+  chiefMKRChange.blockTimestamp = event.block.timestamp;
+  chiefMKRChange.logIndex = event.logIndex;
+  chiefMKRChange.blockNumber = event.block.number;
+  return chiefMKRChange;
 }
 
 export function getGovernanceFramework(
