@@ -60,12 +60,14 @@ export function getVoter(address: string): Voter {
 
 export function createExecutiveVotingPowerChange(
   event: ethereum.Event,
+  amount: BigInt,
   previousBalance: BigInt,
   newBalance: BigInt,
   voter: string
 ): ExecutiveVotingPowerChange {
   const id = `${event.block.timestamp.toI64()}-${event.logIndex}`;
   const chiefMKRChange = new ExecutiveVotingPowerChange(id);
+  chiefMKRChange.amount = amount;
   chiefMKRChange.previousBalance = previousBalance;
   chiefMKRChange.newBalance = newBalance;
   chiefMKRChange.voter = voter;
