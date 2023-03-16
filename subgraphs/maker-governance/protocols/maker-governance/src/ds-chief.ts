@@ -1,10 +1,16 @@
 import { BigInt, Bytes, Address, ethereum, log } from "@graphprotocol/graph-ts";
 import { LogNote, Etch } from "../../../generated/DSChief/DSChief";
-import { ExecutiveVote, Slate, Spell, Voter } from "../../../generated/schema";
+import {
+  DelegateAdmin,
+  ExecutiveVote,
+  Slate,
+  Spell,
+  Voter,
+} from "../../../generated/schema";
 import { BIGINT_ONE, SpellState } from "../../../src/constants";
 import {
   addWeightToSpells,
-  createChiefLockedMKRChange,
+  createExecutiveVotingPowerChange,
   createSlate,
   getGovernanceFramework,
   getVoter,
@@ -21,14 +27,15 @@ export function handleLock(event: LogNote): void {
   const voter = getVoter(sender.toHexString());
 
   // Track the change of MKR locked in chief for the user
-  const chiefLockedMKRChange = createChiefLockedMKRChange(
+  const ExecutiveVotingPowerChange = createExecutiveVotingPowerChange(
     event,
+    amount,
     voter.mkrLockedInChiefRaw,
     voter.mkrLockedInChiefRaw.plus(amount),
     voter.id
   );
 
-  chiefLockedMKRChange.save();
+  ExecutiveVotingPowerChange.save();
 
   // Update the amount of MKR locked in chief for the voter
   voter.mkrLockedInChiefRaw = voter.mkrLockedInChiefRaw.plus(amount);
@@ -53,14 +60,15 @@ export function handleFree(event: LogNote): void {
   const voter = getVoter(sender.toHexString());
 
   // Track the change of MKR locked in chief for the user
-  const chiefLockedMKRChange = createChiefLockedMKRChange(
+  const ExecutiveVotingPowerChange = createExecutiveVotingPowerChange(
     event,
+    amount,
     voter.mkrLockedInChiefRaw,
     voter.mkrLockedInChiefRaw.minus(amount),
     voter.id
   );
 
-  chiefLockedMKRChange.save();
+  ExecutiveVotingPowerChange.save();
 
   // Update the amount of MKR locked in chief for the voter
   voter.mkrLockedInChiefRaw = voter.mkrLockedInChiefRaw.minus(amount);
@@ -86,11 +94,18 @@ export function handleVote(event: LogNote): void {
 export function handleEtch(event: Etch): void {
   let sender = event.transaction.from.toHexString();
   const to = event.transaction.to;
+  // We just need to find the delegate contract that is voting.
+  // The "from" address might be a proxy/multi-sig, but the delegate contract is the one that is voting
+
   // Check if txn is not directly to Chief, it's either to vote delegate or multi-sig + delegate
   if (to && to != event.address) {
-    const fromAdmin = Voter.load(sender);
+    // Check if sender is the owner of a delegate contract
+    const fromAdmin = DelegateAdmin.load(sender);
+
+    // if is not the owner of a delegate contract, check if "to" is the owner of a delegate contract
     if (!fromAdmin) {
-      const toAdmin = Voter.load(to.toHexString());
+      // i
+      const toAdmin = DelegateAdmin.load(to.toHexString());
       if (!toAdmin) {
         log.error("Etch not trigger by a delegate admin. TxnHash: {}", [
           event.transaction.hash.toHexString(),
@@ -104,6 +119,7 @@ export function handleEtch(event: Etch): void {
       sender = fromAdmin.delegateContract!;
     }
   }
+
   const slateID = event.params.slate;
   _handleSlateVote(sender, slateID, event);
 }

@@ -3,7 +3,7 @@ import {
   // DelegateFactory,
   CreateVoteDelegate,
 } from "../../../generated/DelegateFactory/DelegateFactory";
-import { Delegate, Voter } from "../../../generated/schema";
+import { Delegate, DelegateAdmin, Voter } from "../../../generated/schema";
 import { BIGDECIMAL_ZERO, BIGINT_ZERO, CHIEF } from "../../../src/constants";
 import { getGovernanceFramework } from "../../../src/helpers";
 
@@ -23,6 +23,16 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
     delegateInfo.delegators = 0;
     delegateInfo.save();
   }
+
+  // Create delegate admin entity, it links the owner address with the delegate contrat
+  // In the future this entity might hold more than 1 delegate contract
+  let delegateAdmin = DelegateAdmin.load(delegateOwnerAddress);
+
+  if (!delegateAdmin) {
+    delegateAdmin = new DelegateAdmin(delegateOwnerAddress);
+  }
+  delegateAdmin.delegateContract = delegateInfo.id;
+  delegateAdmin.save();
 
   const voter = new Voter(delegateContractAddress);
   voter.mkrLockedInChiefRaw = BIGINT_ZERO;

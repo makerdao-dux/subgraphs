@@ -3,7 +3,7 @@ import {
   GovernanceFramework,
   Spell,
   Slate,
-  ChiefLockedMKRChange,
+  ExecutiveVotingPowerChange,
   Voter,
 } from "../generated/schema";
 import { DSChief } from "../generated/DSChief/DSChief";
@@ -58,14 +58,14 @@ export function getVoter(address: string): Voter {
   return voter;
 }
 
-export function createChiefLockedMKRChange(
+export function createExecutiveVotingPowerChange(
   event: ethereum.Event,
   previousBalance: BigInt,
   newBalance: BigInt,
   voter: string
-): ChiefLockedMKRChange {
+): ExecutiveVotingPowerChange {
   const id = `${event.block.timestamp.toI64()}-${event.logIndex}`;
-  const chiefMKRChange = new ChiefLockedMKRChange(id);
+  const chiefMKRChange = new ExecutiveVotingPowerChange(id);
   chiefMKRChange.previousBalance = previousBalance;
   chiefMKRChange.newBalance = newBalance;
   chiefMKRChange.voter = voter;
