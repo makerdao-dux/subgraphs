@@ -119,6 +119,12 @@ type Delegate @entity {
   "Delegations that this contract has received"
   delegations: [Delegation!]!
 
+  "Delegation history"
+  delegationHistory: [DelegationHistory!]!
+
+  "Total amount delegated"
+  totalDelegated: BigInt!
+
   "Number of token holders delegate represents"
   delegators: Int!
 

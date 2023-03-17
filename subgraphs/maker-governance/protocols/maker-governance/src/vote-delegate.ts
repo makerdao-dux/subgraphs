@@ -32,7 +32,6 @@ export function handleDelegateLock(event: Lock): void {
     if (delegation.amount.equals(BIGINT_ZERO)) {
       delegate.delegators = delegate.delegators + 1;
     }
-    delegate.save();
 
     // Increase the total amount delegated to the delegate
     delegation.amount = delegation.amount.plus(event.params.wad);
@@ -52,6 +51,16 @@ export function handleDelegateLock(event: Lock): void {
     delegationHistory.txnHash = event.transaction.hash.toHexString();
     delegationHistory.timestamp = event.block.timestamp;
     delegationHistory.save();
+
+    // Add the delegation history to the delegate
+    delegate.delegationHistory = delegate.delegationHistory.concat([
+      delegationHistoryId,
+    ]);
+
+    // Increase the total amount delegated to the delegate
+    delegate.totalDelegated = delegate.totalDelegated.plus(event.params.wad);
+
+    delegate.save();
   }
 
   const framework = getGovernanceFramework(CHIEF);
@@ -83,7 +92,6 @@ export function handleDelegateFree(event: Free): void {
     }
 
     delegation.save();
-    delegate.save();
 
     // Create a new delegation history entity
     const delegationHistoryId =
@@ -100,6 +108,16 @@ export function handleDelegateFree(event: Free): void {
     delegationHistory.txnHash = event.transaction.hash.toHexString();
     delegationHistory.timestamp = event.block.timestamp;
     delegationHistory.save();
+
+    // Add the delegation history to the delegate
+    delegate.delegationHistory = delegate.delegationHistory.concat([
+      delegationHistoryId,
+    ]);
+
+    // Decrease the total amount delegated to the delegate
+    delegate.totalDelegated = delegate.totalDelegated.minus(event.params.wad);
+
+    delegate.save();
   }
 
   const framework = getGovernanceFramework(CHIEF);
