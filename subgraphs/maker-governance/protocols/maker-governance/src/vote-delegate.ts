@@ -10,13 +10,14 @@ export function handleDelegateLock(event: Lock): void {
 
   if (delegate) {
     // If the address is a delegate, update the delegate's stats
-    const delegationID = delegate.id + "-" + sender;
-    let delegation = Delegation.load(delegationID);
+    const delegationId = delegate.id + "-" + sender;
+    let delegation = Delegation.load(delegationId);
+
     if (!delegation) {
-      delegation = new Delegation(delegationID);
+      delegation = new Delegation(delegationId);
       delegation.delegator = sender;
       delegation.amount = BIGINT_ZERO;
-      delegate.delegations = delegate.delegations.concat([delegationID]);
+      delegate.delegations = delegate.delegations.concat([delegationId]);
     }
     if (delegation.amount.equals(BIGINT_ZERO)) {
       delegate.delegators = delegate.delegators + 1;
@@ -40,8 +41,8 @@ export function handleDelegateFree(event: Free): void {
   const delegate = Delegate.load(delegateAddress.toHexString());
 
   if (delegate) {
-    const delegationID = delegate.id + "-" + sender;
-    const delegation = Delegation.load(delegationID);
+    const delegationId = delegate.id + "-" + sender;
+    const delegation = Delegation.load(delegationId);
     if (!delegation) return;
 
     delegation.amount = delegation.amount.minus(event.params.wad);

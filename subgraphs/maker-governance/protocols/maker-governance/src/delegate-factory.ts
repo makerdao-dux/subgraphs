@@ -9,9 +9,9 @@ import { getGovernanceFramework } from "../../../src/helpers";
 
 export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
   // https://etherscan.io/address/0xD897F108670903D1d6070fcf818f9db3615AF272#code
-  // event.params.delegate and event.transcation.from.toHex() should be the same
-  const delegateOwnerAddress = event.transaction.from.toHex();
-  const delegateContractAddress = event.params.voteDelegate.toHex();
+  // event.params.delegate and event.transcation.from.toHexString() should be the same
+  const delegateOwnerAddress = event.transaction.from.toHexString();
+  const delegateContractAddress = event.params.voteDelegate.toHexString();
 
   // Create the delegate contract
   let delegateInfo = Delegate.load(delegateContractAddress);
