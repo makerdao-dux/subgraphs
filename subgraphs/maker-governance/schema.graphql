@@ -121,6 +121,15 @@ type Delegate @entity {
 
   "Number of token holders delegate represents"
   delegators: Int!
+
+  "Transaction hash of delegate contract creation"
+  txnHash: String!
+
+  "Block time change happened"
+  blockTimestamp: BigInt!
+
+  "Block number of event"
+  blockNumber: BigInt!
 }
 
 type VoteProxy @entity {

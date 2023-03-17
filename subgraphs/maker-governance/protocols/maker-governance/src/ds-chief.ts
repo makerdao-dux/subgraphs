@@ -112,11 +112,11 @@ export function handleEtch(event: Etch): void {
         ]);
       } else {
         // Txn sent via a proxy/multi-sig to vote delegate
-        sender = toAdmin.delegateContract!;
+        sender = toAdmin.delegateContract;
       }
     } else {
       // Txn sent to vote delegate
-      sender = fromAdmin.delegateContract!;
+      sender = fromAdmin.delegateContract;
     }
   }
 

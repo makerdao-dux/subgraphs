@@ -6,11 +6,12 @@ import {
 import { Delegate, DelegateAdmin, Voter } from "../../../generated/schema";
 import { BIGDECIMAL_ZERO, BIGINT_ZERO, CHIEF } from "../../../src/constants";
 import { getGovernanceFramework } from "../../../src/helpers";
+import { VoteDelegate as VoteDelegateTemplate } from "../../../generated/templates";
 
 export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
   // https://etherscan.io/address/0xD897F108670903D1d6070fcf818f9db3615AF272#code
   // event.params.delegate and event.transcation.from.toHexString() should be the same
-  const delegateOwnerAddress = event.transaction.from.toHexString();
+  const delegateOwnerAddress = event.transaction.from;
   const delegateContractAddress = event.params.voteDelegate.toHexString();
 
   // Create the delegate contract
@@ -18,21 +19,27 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
 
   if (!delegateInfo) {
     delegateInfo = new Delegate(delegateContractAddress);
-    delegateInfo.ownerAddress = delegateOwnerAddress;
+    delegateInfo.ownerAddress = delegateOwnerAddress.toHexString();
     delegateInfo.delegations = [];
     delegateInfo.delegators = 0;
+    delegateInfo.blockTimestamp = event.block.timestamp;
+    delegateInfo.blockNumber = event.block.number;
+    delegateInfo.txnHash = event.transaction.hash.toHexString();
     delegateInfo.save();
   }
 
   // Create delegate admin entity, it links the owner address with the delegate contrat
   // In the future this entity might hold more than 1 delegate contract
-  let delegateAdmin = DelegateAdmin.load(delegateOwnerAddress);
+  let delegateAdmin = DelegateAdmin.load(delegateOwnerAddress.toHexString());
 
   if (!delegateAdmin) {
-    delegateAdmin = new DelegateAdmin(delegateOwnerAddress);
+    delegateAdmin = new DelegateAdmin(delegateOwnerAddress.toHexString());
   }
   delegateAdmin.delegateContract = delegateInfo.id;
   delegateAdmin.save();
+
+  // Track this new vote delegate contract
+  VoteDelegateTemplate.create(delegateOwnerAddress);
 
   const voter = new Voter(delegateContractAddress);
   voter.mkrLockedInChiefRaw = BIGINT_ZERO;
