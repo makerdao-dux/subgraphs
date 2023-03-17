@@ -6,6 +6,7 @@ import {
 import { Lock, Free } from "../../../generated/DSChief/VoteDelegate";
 import { getGovernanceFramework } from "../../../src/helpers";
 import { BIGINT_ZERO, CHIEF } from "../../../src/constants";
+import { BigInt } from "@graphprotocol/graph-ts";
 
 export function handleDelegateLock(event: Lock): void {
   const sender = event.params.usr.toHexString();
@@ -90,8 +91,9 @@ export function handleDelegateFree(event: Free): void {
     const delegationHistory = new DelegationHistory(delegationHistoryId);
     delegationHistory.delegator = delegation.delegator;
     delegationHistory.delegate = delegation.delegate;
-    delegationHistory.amount = event.params.wad;
-    delegationHistory.accumulatedAmount = delegation.amount.plus(
+    // Amount is negative because it is a free event
+    delegationHistory.amount = event.params.wad.times(BigInt.fromI64(-1));
+    delegationHistory.accumulatedAmount = delegation.amount.minus(
       event.params.wad
     );
     delegationHistory.blockNumber = event.block.number;
