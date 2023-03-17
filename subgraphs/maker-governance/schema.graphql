@@ -185,6 +185,29 @@ type Delegation @entity {
   delegator: String!
   "Total amount delegated"
   amount: BigInt!
+  "Last time updated"
+  timestamp: BigInt!
+  "Delegate contract"
+  delegate: Delegate!
+}
+
+type DelegationHistory @entity {
+  "delegate-delegator-date"
+  id: String!
+  "Address of the delegator"
+  delegator: String!
+  "Change in total amount, can be negative"
+  amount: BigInt!
+  "Accumulated total amount"
+  accumulatedAmount: BigInt!
+  "Time it happened"
+  timestamp: BigInt!
+  "Block number"
+  blockNumber: BigInt!
+  "Transaction hash"
+  txnHash: String!
+  "Delegate contract"
+  delegate: Delegate!
 }
 
 type ExecutiveVotingPowerChange @entity(immutable: true) {
