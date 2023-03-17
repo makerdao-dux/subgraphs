@@ -12,13 +12,13 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
   // https://etherscan.io/address/0xD897F108670903D1d6070fcf818f9db3615AF272#code
   // event.params.delegate and event.transcation.from.toHexString() should be the same
   const delegateOwnerAddress = event.transaction.from;
-  const delegateContractAddress = event.params.voteDelegate.toHexString();
+  const delegateContractAddress = event.params.voteDelegate;
 
   // Create the delegate contract
-  let delegateInfo = Delegate.load(delegateContractAddress);
+  let delegateInfo = Delegate.load(delegateContractAddress.toHexString());
 
   if (!delegateInfo) {
-    delegateInfo = new Delegate(delegateContractAddress);
+    delegateInfo = new Delegate(delegateContractAddress.toHexString());
     delegateInfo.ownerAddress = delegateOwnerAddress.toHexString();
     delegateInfo.delegations = [];
     delegateInfo.delegators = 0;
@@ -39,9 +39,9 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
   delegateAdmin.save();
 
   // Track this new vote delegate contract
-  VoteDelegateTemplate.create(delegateOwnerAddress);
+  VoteDelegateTemplate.create(delegateContractAddress);
 
-  const voter = new Voter(delegateContractAddress);
+  const voter = new Voter(delegateContractAddress.toHexString());
   voter.mkrLockedInChiefRaw = BIGINT_ZERO;
   voter.mkrLockedInChief = BIGDECIMAL_ZERO;
   voter.currentSpells = [];
@@ -50,7 +50,7 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
   voter.isVoteDelegate = true;
   voter.isVoteProxy = false;
   // Assign the delegate contract to the voter
-  voter.delegateContract = delegateContractAddress;
+  voter.delegateContract = delegateContractAddress.toHexString();
 
   voter.save();
 
