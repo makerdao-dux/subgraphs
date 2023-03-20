@@ -295,5 +295,5 @@ type ContentHashRegistry @entity {
   address: Bytes!
   node: Bytes!
   nodeHexString: String!
-  hashHexString: Bytes!
+  hashHexString: String!
 }
