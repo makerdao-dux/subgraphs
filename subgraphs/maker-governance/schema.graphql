@@ -92,53 +92,98 @@ type Spell @entity {
   totalWeightedVotes: BigInt!
 
   "Votes associated to this spell"
-  votes: [Vote!]! @derivedFrom(field: "spell")
+  votes: [ExecutiveVote!]! @derivedFrom(field: "spell")
 }
+
 enum SpellState {
   ACTIVE
   LIFTED
   SCHEDULED
   CAST
 }
+
 type DelegateAdmin @entity {
-  "A delegate admin is an address controls a Vote Delegate contract"
+  "A delegate admin is an address that controls a delegate contract"
   id: String!
-  "Vote delegate contract that delegate admin controls"
-  voteDelegate: Delegate
+
+  "Delegate contracts addresses"
+  delegateContract: Delegate!
 }
 
 type Delegate @entity {
-  "A Delegate is any address that has been delegated with voting tokens by a token holder, id is the blockchain address of said delegate"
+  "A delegate is a contract owned by an address, Id is the address of the delegate contract"
   id: String!
-  "Is a vote delegate contract"
-  isVoteDelegate: Boolean
 
-  "Delegate admin is the address that controls a Vote Delegate contract"
-  delegateAdmin: DelegateAdmin
-
-  "Delegate voting power expressed in the smallest unit of the token"
-  votingPowerRaw: BigInt!
-  "Delegate voting power expressed as a BigDecimal normalized value"
-  votingPower: BigDecimal!
+  ownerAddress: String!
 
   "Delegations that this contract has received"
   delegations: [Delegation!]!
-  "Number of token holders delegate represents"
-  tokenHoldersRepresented: Int!
 
-  "Current slate of spells delegate is voting for"
+  "Delegation history"
+  delegationHistory: [DelegationHistory!]!
+
+  "Total amount delegated"
+  totalDelegated: BigInt!
+
+  "Number of token holders delegate represents"
+  delegators: Int!
+
+  "Transaction hash of delegate contract creation"
+  txnHash: String!
+
+  "Block time change happened"
+  blockTimestamp: BigInt!
+
+  "Block number of event"
+  blockNumber: BigInt!
+}
+
+type VoteProxy @entity {
+  "A proxy is a contract owned by an address, Id is the address of the proxy contract"
+  id: String!
+
+  hot: String!
+
+  cold: String!
+}
+
+type Voter @entity {
+  "A Voter is any address that has participated in governance, a proxy contract or a delegate contract"
+  id: String!
+
+  "Is a vote delegate contract"
+  isVoteDelegate: Boolean
+  "Is a vote proxy contract"
+  isVoteProxy: Boolean
+
+  "Delegate admin is the address that controls a Vote Delegate contract"
+  delegateContract: Delegate
+
+  "Proxy contract"
+  proxyContract: VoteProxy
+
+  "Voter voting power expressed in the smallest unit of the token"
+  mkrLockedInChiefRaw: BigInt!
+
+  "Voter voting power expressed as a BigDecimal normalized value"
+  mkrLockedInChief: BigDecimal!
+
+  "Current slate of spells voter is voting for"
   currentSpells: [Spell!]!
 
-  "Votes that a delegate has made in different spells"
-  votes: [Vote!]! @derivedFrom(field: "voter")
+  "Votes that a voter has made in different spells"
+  executiveVotes: [ExecutiveVote!]! @derivedFrom(field: "voter")
+
   "Number of spells voted on"
-  numberVotes: Int!
+  numberExecutiveVotes: Int!
 
   "Poll votes associated to this spell"
   pollVotes: [PollVote!]! @derivedFrom(field: "voter")
+
   "Number of spells voted on"
   numberPollVotes: Int!
 }
+
 type Delegation @entity {
   "delegate-delegator"
   id: String!
@@ -146,21 +191,44 @@ type Delegation @entity {
   delegator: String!
   "Total amount delegated"
   amount: BigInt!
+  "Last time updated"
+  timestamp: BigInt!
+  "Delegate contract"
+  delegate: Delegate!
 }
 
-type DelegateVotingPowerChange @entity(immutable: true) {
+type DelegationHistory @entity {
+  "delegate-delegator-date"
+  id: String!
+  "Address of the delegator"
+  delegator: String!
+  "Change in total amount, can be negative"
+  amount: BigInt!
+  "Accumulated total amount"
+  accumulatedAmount: BigInt!
+  "Time it happened"
+  timestamp: BigInt!
+  "Block number"
+  blockNumber: BigInt!
+  "Transaction hash"
+  txnHash: String!
+  "Delegate contract"
+  delegate: Delegate!
+}
+
+type ExecutiveVotingPowerChange @entity(immutable: true) {
   "Unique entity used to keep track of voting power delta"
   id: ID!
   "Token addresss"
   tokenAddress: String
-  "Token address for delegate"
-  delegate: String!
-  "Previous voting power of delegate"
-  sender: String!
+  "Token address for voter"
+  voter: String!
   "Sender of the voting power change transaction"
   previousBalance: BigInt!
   "New voting power of delegate"
   newBalance: BigInt!
+  "amount can be negative or positive"
+  amount: BigInt!
   "Block time change happened"
   blockTimestamp: BigInt!
   "Transaction hash of the voting power change"
@@ -171,15 +239,15 @@ type DelegateVotingPowerChange @entity(immutable: true) {
   blockNumber: BigInt!
 }
 
-type Vote @entity {
-  "Delegate ID + spell ID"
+type ExecutiveVote @entity {
+  "Voter ID + spell ID"
   id: ID!
   "Voting weight expressed in the vote"
   weight: BigInt!
   "Reason for voting choice"
   reason: String
-  "Delegate that emitted the vote"
-  voter: Delegate!
+  "Voter that emitted the vote"
+  voter: Voter!
   "spell that is being voted on"
   spell: Spell!
 
@@ -199,8 +267,8 @@ type PollVote @entity {
   id: String!
   "Voting weight expressed in the vote"
   choice: BigInt!
-  "Delegate that emitted the vote"
-  voter: Delegate!
+  "Voter that emitted the vote"
+  voter: Voter!
   "Poll that is being voted on"
   poll: Poll!
 
