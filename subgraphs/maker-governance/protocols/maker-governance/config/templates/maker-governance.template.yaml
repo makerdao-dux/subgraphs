@@ -67,6 +67,25 @@ dataSources:
         - event: CreateVoteDelegate(indexed address,indexed address)
           handler: handleCreateVoteDelegate
       file: ./protocols/maker-governance/src/delegate-factory.ts
+  - kind: ethereum/contract
+    name: Resolver
+    network: mainnet
+    source:
+      abi: Resolver
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/resolver.ts
+      entities:
+        - ContenthashChanged
+      abis:
+        - name: Resolver
+          file: ./abis/ens/PublicResolver.json
+      eventHandlers:
+        - event: "ContenthashChanged(indexed bytes32,bytes)"
+          handler: handleContentHashChanged
+  
   # - kind: ethereum
   #   name: PollingEmitter
   #   network: mainnet

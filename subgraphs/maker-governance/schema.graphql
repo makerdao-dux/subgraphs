@@ -286,3 +286,10 @@ type Poll @entity {
   "Poll votes associated to this spell"
   pollVotes: [PollVote!]! @derivedFrom(field: "poll")
 }
+
+type ContenthashChanged @entity {
+  id: ID!
+  blockNumber: Int!
+  transactionID: Bytes!
+  hash: Bytes!
+}
