@@ -287,9 +287,13 @@ type Poll @entity {
   pollVotes: [PollVote!]! @derivedFrom(field: "poll")
 }
 
-type ContenthashChanged @entity {
+type ContentHashRegistry @entity {
   id: ID!
   blockNumber: Int!
   transactionID: Bytes!
   hash: Bytes!
+  address: Bytes!
+  node: Bytes!
+  nodeHexString: String!
+  hashHexString: Bytes!
 }
