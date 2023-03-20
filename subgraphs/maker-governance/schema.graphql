@@ -282,6 +282,24 @@ type PollVote @entity {
   txnHash: String!
 }
 
+type Poll @entity {
+  "Poll's id"
+  id: String!
+  "Poll votes associated to this spell"
+  pollVotes: [PollVote!]! @derivedFrom(field: "poll")
+}
+
+type ContentHashRegistry @entity {
+  id: ID!
+  blockNumber: Int!
+  transactionID: Bytes!
+  hash: Bytes!
+  address: Bytes!
+  node: Bytes!
+  nodeHexString: String!
+  hashHexString: String!
+}
+
 type DelegateMetadata @entity {
   "Delegate contract address"
   id: String!
@@ -308,24 +326,6 @@ type DelegateMetrics @entity {
   pollParticipation: BigDecimal!
   executiveParticipation: BigDecimal!
   communication: BigDecimal!
-}
-
-type Poll @entity {
-  "Poll's id"
-  id: String!
-  "Poll votes associated to this spell"
-  pollVotes: [PollVote!]! @derivedFrom(field: "poll")
-}
-
-type ContentHashRegistry @entity {
-  id: ID!
-  blockNumber: Int!
-  transactionID: Bytes!
-  hash: Bytes!
-  address: Bytes!
-  node: Bytes!
-  nodeHexString: String!
-  hashHexString: String!
 }
 
 type VotingStrategy @entity {
