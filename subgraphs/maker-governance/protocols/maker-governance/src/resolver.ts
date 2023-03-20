@@ -10,11 +10,11 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
   const transactionID = event.transaction.hash;
 
   const registry = new ContentHashRegistry(
-    node.toHexString() + "-" + contentHash.toHexString()
+    node.toString() + "-" + contentHash.toHexString()
   );
   registry.node = node;
-  registry.nodeHexString = node.toHexString();
-  registry.hashHexString = contentHash.toHexString();
+  registry.nodeHexString = node.toString();
+  registry.hashHexString = contentHash.toString();
   registry.blockNumber = blockNumber;
   registry.transactionID = transactionID;
   registry.hash = contentHash;
