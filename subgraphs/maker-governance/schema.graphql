@@ -136,6 +136,8 @@ type Delegate @entity {
 
   "Block number of event"
   blockNumber: BigInt!
+
+  metadata: DelegateMetadata!
 }
 
 type VoteProxy @entity {
@@ -280,6 +282,34 @@ type PollVote @entity {
   txnHash: String!
 }
 
+type DelegateMetadata @entity {
+  "Delegate contract address"
+  id: String!
+  "Delegate name"
+  name: String!
+  "Delegate description"
+  description: String!
+  "Delegate image"
+  image: String!
+  "Delegate external profile URL"
+  externalProfileURL: String!
+  "Delegate tags"
+  tags: [DelegateTags!]!
+  "Metrics"
+  metrics: DelegateMetrics!
+  "Core unit member"
+  coreUnitMember: Boolean!
+}
+
+type DelegateMetrics @entity {
+  "Delegate contract address"
+  id: String!
+  combinedParticipation: BigDecimal!
+  pollParticipation: BigDecimal!
+  executiveParticipation: BigDecimal!
+  communication: BigDecimal!
+}
+
 type Poll @entity {
   "Poll's id"
   id: String!
@@ -296,4 +326,27 @@ type ContentHashRegistry @entity {
   node: Bytes!
   nodeHexString: String!
   hashHexString: String!
+}
+
+type VotingStrategy @entity {
+  id: ID!
+  name: String!
+  description: String!
+  delegates: [Delegate!]!
+}
+
+type VotingCommittee @entity {
+  id: ID!
+  name: String!
+  description: String!
+  image: String!
+  externalProfileURL: String!
+  strategies: [VotingStrategy!]!
+}
+
+type DelegateTags @entity {
+  id: ID!
+  shortName: String!
+  longName: String!
+  description: String!
 }
