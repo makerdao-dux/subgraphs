@@ -69,31 +69,35 @@ export function handleMetadata(content: Bytes): void {
 
         // Parse the metrics, they are strings like "94.23%" into BigDecimals
         const rawCombinedParticipation =
-          delegateMetricsData
-            .toObject()
-            .get("combinedParticipation")
-            ?.toString() || "0.0%";
+          (
+            delegateMetricsData
+              .toObject()
+              .get("combinedParticipation") as JSONValue
+          ).toString() || "0.0%";
         metrics.combinedParticipation = extractBigDecimal(
           rawCombinedParticipation
         );
 
         const rawPollParticipation =
-          delegateMetricsData.toObject().get("pollParticipation")?.toString() ||
-          "0.0%";
+          (
+            delegateMetricsData.toObject().get("pollParticipation") as JSONValue
+          ).toString() || "0.0%";
         metrics.pollParticipation = extractBigDecimal(rawPollParticipation);
 
         const rawExecutiveParticipation =
-          delegateMetricsData
-            .toObject()
-            .get("executiveParticipation")
-            ?.toString() || "0.0%";
+          (
+            delegateMetricsData
+              .toObject()
+              .get("executiveParticipation") as JSONValue
+          ).toString() || "0.0%";
         metrics.executiveParticipation = extractBigDecimal(
           rawExecutiveParticipation
         );
 
         const rawCommunication =
-          delegateMetricsData.toObject().get("communication")?.toString() ||
-          "0.0%";
+          (
+            delegateMetricsData.toObject().get("communication") as JSONValue
+          ).toString() || "0.0%";
         metrics.communication = extractBigDecimal(rawCommunication);
 
         // save the metrics
