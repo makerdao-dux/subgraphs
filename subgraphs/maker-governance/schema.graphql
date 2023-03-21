@@ -137,7 +137,7 @@ type Delegate @entity {
   "Block number of event"
   blockNumber: BigInt!
 
-  metadata: DelegateMetadata!
+  metadata: DelegateMetadata
 }
 
 type VoteProxy @entity {
