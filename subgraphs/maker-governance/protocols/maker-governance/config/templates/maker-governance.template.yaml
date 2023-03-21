@@ -187,3 +187,20 @@ templates:
         - event: Free(indexed address,uint256)
           handler: handleDelegateFree
       file: ./protocols/maker-governance/src/vote-delegate.ts
+  - kind: file/ipfs
+    name: IPFSMetadata
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./protocols/maker-governance/src/parse-ipfs-metadata.ts
+      handler: handleMetadata
+      entities:
+        - Delegate
+        - DelegateMetadata
+        - DelegateMetrics
+        - VotingStrategy
+        - VotingCommittee
+        - DelegateTags
+      abis:
+        - name: Resolver
+          file: ./abis/ens/PublicResolver.json

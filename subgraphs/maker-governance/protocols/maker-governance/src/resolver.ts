@@ -1,6 +1,7 @@
 import { json } from "@graphprotocol/graph-ts";
 import { ContenthashChanged } from "../../../generated/Resolver/Resolver";
 import { ContentHashRegistry } from "../../../generated/schema";
+import { IPFSMetadata as IPFSMetadataTemplate } from "../../../generated/templates";
 
 export function handleContentHashChanged(event: ContenthashChanged): void {
   // Filter by our ens domain
@@ -21,6 +22,9 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
   registry.transactionID = transactionID;
   registry.hash = contentHash;
   registry.address = address;
+
+  // TODO : Decode the content hash
+  IPFSMetadataTemplate.create("QmQ9hBWwK4CBgXfjDTQFmku3Kwd7Dg2AVGnCbGn6diw2wi");
 
   // Fetch the latest content hash from IPFS
   // first we need to get the IPFS hash from the content hash, it is encoded in b58
