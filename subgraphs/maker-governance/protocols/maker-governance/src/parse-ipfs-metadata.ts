@@ -11,7 +11,7 @@ export function handleMetadata(content: Bytes): void {
       const delegateDataObject = delegateData.toObject();
 
       const delegateAddress = (
-        delegateDataObject.get("delegateAddress") as JSONValue
+        delegateDataObject.get("voteDelegateAddress") as JSONValue
       )
         .toString()
         .toLowerCase();
