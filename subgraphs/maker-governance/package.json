@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ danielkhoo/maker-governance",
-    "create-local": "graph create --node http://localhost:8020/ danielkhoo/maker-governance",
-    "remove-local": "graph remove --node http://localhost:8020/ danielkhoo/maker-governance",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 danielkhoo/maker-governance"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ makerdao-dux/maker-governance-test-hector",
+    "create-local": "graph create --node http://localhost:8020/ makerdao-dux/maker-governance-test-hector",
+    "remove-local": "graph remove --node http://localhost:8020/ makerdao-dux/maker-governance-test-hector",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 makerdao-dux/maker-governance-test-hector"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.42.0",
