@@ -20,6 +20,7 @@ function extractBigDecimal(value: string): BigDecimal {
 }
 
 export function handleMetadata(content: Bytes): void {
+  log.debug("handleMetadata Content: {}", [content.toString()]);
   const value = json.fromBytes(content).toObject();
   //const value = json.fromString(mock).toObject();
   if (value) {
