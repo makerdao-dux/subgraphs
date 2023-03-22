@@ -1,4 +1,10 @@
-import { json, Bytes, JSONValue, BigDecimal } from "@graphprotocol/graph-ts";
+import {
+  json,
+  Bytes,
+  JSONValue,
+  BigDecimal,
+  log,
+} from "@graphprotocol/graph-ts";
 import {
   Delegate,
   DelegateMetadata,
@@ -27,8 +33,10 @@ export function handleMetadata(content: Bytes): void {
       )
         .toString()
         .toLowerCase();
+      log.debug("Delegate address: {}", [delegateAddress]);
       const delegate = Delegate.load(delegateAddress);
       if (delegate) {
+        log.debug("Delegate found: {}", [delegate.id]);
         let delegateMetadata = DelegateMetadata.load(delegateAddress);
 
         if (!delegateMetadata) {
@@ -112,6 +120,8 @@ export function handleMetadata(content: Bytes): void {
         // Update the delegate to point to the metadata
         delegate.metadata = delegateMetadata.id;
         delegate.save();
+
+        log.debug("Delegate metadata saved: {}", [delegateMetadata.id]);
       }
     });
 
