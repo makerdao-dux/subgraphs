@@ -1,4 +1,4 @@
-import { Bytes, json, log } from "@graphprotocol/graph-ts";
+import { Bytes, log } from "@graphprotocol/graph-ts";
 import { ContenthashChanged } from "../../../generated/Resolver/Resolver";
 import { ContentHashRegistry } from "../../../generated/schema";
 import { IPFSMetadata as IPFSMetadataTemplate } from "../../../generated/templates";
@@ -13,6 +13,8 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
   const contentHash = event.params.hash;
   const blockNumber = event.block.number.toI32();
   const transactionID = event.transaction.hash;
+
+  log.debug("Node", [node.toHexString(), node.toString(), node.toHex()]);
 
   if (node.toHexString() === MAKER_ENS_NODE) {
     log.debug("handleContentHashChanged MAKER_ENS_NODE: {}", [MAKER_ENS_NODE]);
@@ -31,6 +33,7 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
     const ipfCID = Bytes.fromHexString(
       contentHash.toHexString().slice(10)
     ).toBase58();
+
     log.debug("handleContentHashChanged IPFS CID: {}", [ipfCID]);
     // TODO : Decode the content hash
     IPFSMetadataTemplate.create(
