@@ -14,9 +14,13 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
   const blockNumber = event.block.number.toI32();
   const transactionID = event.transaction.hash;
 
-  log.debug("Node", [node.toHexString(), node.toString(), node.toHex()]);
+  log.debug("Node: {}, {}, {}", [
+    node.toHexString(),
+    node.toString(),
+    node.toHex(),
+  ]);
 
-  if (node.toHexString() === MAKER_ENS_NODE) {
+  if (node.toHexString() == MAKER_ENS_NODE) {
     log.debug("handleContentHashChanged MAKER_ENS_NODE: {}", [MAKER_ENS_NODE]);
     const registry = new ContentHashRegistry(
       node.toHexString() + "-" + contentHash.toHexString()
