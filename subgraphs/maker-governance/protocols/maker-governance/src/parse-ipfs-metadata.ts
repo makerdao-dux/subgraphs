@@ -103,11 +103,13 @@ export function handleMetadata(content: Bytes): void {
       delegateVotingCommittee.externalProfileURL = externalProfileURL;
 
       // Define the strategies
-      const strategies = (
+      const mapStrategies = (
         votingCommitteeObject.get("strategies") as JSONValue
       ).toArray();
 
-      const strategyIds = strategies.map((strategy) => {
+      let strategies = mapStrategies;
+
+      const strategyIds = strategies.map<string>((strategy) => {
         const strategyObject = strategy.toObject();
 
         // Check if strategy exist
@@ -131,7 +133,7 @@ export function handleMetadata(content: Bytes): void {
         // Delegates (array of addresses)
         const delegates = (strategyObject.get("delegates") as JSONValue)
           .toArray()
-          .map((delegate) => {
+          .map<string>((delegate) => {
             return delegate.toString();
           });
 
@@ -203,7 +205,7 @@ export function handleMetadata(content: Bytes): void {
 
         delegateMetadata.tags = (profile.toObject().get("tags") as JSONValue)
           .toArray()
-          .map((tag) => tag.toString());
+          .map<string>((tag) => tag.toString());
 
         delegateMetadata.coreUnitMember = (
           profile.toObject().get("cuMember") as JSONValue
