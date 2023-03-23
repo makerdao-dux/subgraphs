@@ -8,7 +8,6 @@ import {
 import {
   DelegateMetadata,
   DelegateMetrics,
-  DelegateTags,
   Delegate,
   VotingCommittee,
   VotingStrategy,
@@ -71,12 +70,11 @@ export function handleMetadata(content: Bytes): void {
       delegateVotingCommittee.externalProfileURL = externalProfileURL;
 
       // Define the strategies
-      const strategies = (
+      const mapStrategies = (
         votingCommitteeObject.get("strategies") as JSONValue
       ).toArray();
 
-      let strategyIds: string[] = [];
-      strategies.forEach((strategy) => {
+      const strategyIds = mapStrategies.map<string>((strategy) => {
         const strategyObject = strategy.toObject();
 
         // Check if strategy exist
@@ -98,11 +96,10 @@ export function handleMetadata(content: Bytes): void {
         delegateStrategy.description = description;
 
         // Delegates (array of addresses)
-        let delegates: string[] = [];
-        (strategyObject.get("delegates") as JSONValue)
+        const delegates = (strategyObject.get("delegates") as JSONValue)
           .toArray()
-          .forEach((delegate) => {
-            delegates = delegates.concat([delegate.toString()]);
+          .map<string>((delegate) => {
+            return delegate.toString();
           });
 
         delegateStrategy.delegates = delegates;
@@ -110,7 +107,7 @@ export function handleMetadata(content: Bytes): void {
         // Save the delegate strategy
         delegateStrategy.save();
 
-        strategyIds = strategyIds.concat([delegateStrategy.id]);
+        return strategyName;
       });
 
       delegateVotingCommittee.strategies = strategyIds;
