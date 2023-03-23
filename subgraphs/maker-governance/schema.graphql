@@ -329,23 +329,23 @@ type DelegateMetrics @entity {
 }
 
 type VotingStrategy @entity {
-  id: ID!
+  id: String!
   name: String!
   description: String!
   delegates: [Delegate!]!
 }
 
 type VotingCommittee @entity {
-  id: ID!
+  id: String!
   name: String!
-  description: String!
-  image: String!
-  externalProfileURL: String!
+  description: String
+  image: String
+  externalProfileURL: String
   strategies: [VotingStrategy!]!
 }
 
 type DelegateTags @entity {
-  id: ID!
+  id: String!
   shortName: String!
   longName: String!
   description: String!

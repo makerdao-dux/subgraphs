@@ -156,9 +156,12 @@ export function handleMetadata(content: Bytes): void {
       )
         .toString()
         .toLowerCase();
+
       log.debug("Delegate address: {}", [delegateAddress]);
       const delegate = Delegate.load(delegateAddress);
-      log.debug("Delegate loaded: {}", [delegate?.id || "Not found"]);
+
+      log.debug("Delegate loaded: {}", [delegate ? delegate.id : "Not found"]);
+
       if (delegate) {
         log.debug("Delegate found: {}", [delegate.id]);
         let delegateMetadata = DelegateMetadata.load(delegateAddress);
