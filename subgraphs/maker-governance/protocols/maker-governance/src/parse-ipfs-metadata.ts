@@ -107,7 +107,8 @@ export function handleMetadata(content: Bytes): void {
         votingCommitteeObject.get("strategies") as JSONValue
       ).toArray();
 
-      const strategyIds = strategies.map((strategy) => {
+      let strategyIds: string[] = [];
+      strategies.forEach((strategy) => {
         const strategyObject = strategy.toObject();
 
         // Check if strategy exist
@@ -129,10 +130,11 @@ export function handleMetadata(content: Bytes): void {
         delegateStrategy.description = description;
 
         // Delegates (array of addresses)
-        const delegates = (strategyObject.get("delegates") as JSONValue)
+        let delegates: string[] = [];
+        (strategyObject.get("delegates") as JSONValue)
           .toArray()
-          .map((delegate) => {
-            return delegate.toString();
+          .forEach((delegate) => {
+            delegates = delegates.concat([delegate.toString()]);
           });
 
         delegateStrategy.delegates = delegates;
@@ -140,7 +142,7 @@ export function handleMetadata(content: Bytes): void {
         // Save the delegate strategy
         delegateStrategy.save();
 
-        return strategyName;
+        strategyIds = strategyIds.concat([delegateStrategy.id]);
       });
 
       delegateVotingCommittee.strategies = strategyIds;
@@ -201,9 +203,15 @@ export function handleMetadata(content: Bytes): void {
           delegateMetadata.externalProfileURL,
         ]);
 
-        delegateMetadata.tags = (profile.toObject().get("tags") as JSONValue)
+        let tags: string[] = [];
+
+        (profile.toObject().get("tags") as JSONValue)
           .toArray()
-          .map((tag) => tag.toString());
+          .forEach((tag) => {
+            tags = tags.concat([tag.toString()]);
+          });
+
+        delegateMetadata.tags = tags;
 
         delegateMetadata.coreUnitMember = (
           profile.toObject().get("cuMember") as JSONValue
