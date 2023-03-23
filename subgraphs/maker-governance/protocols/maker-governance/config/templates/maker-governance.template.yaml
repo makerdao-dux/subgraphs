@@ -72,6 +72,7 @@ dataSources:
     network: mainnet
     source:
       abi: Resolver
+      startBlock: 16868295
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

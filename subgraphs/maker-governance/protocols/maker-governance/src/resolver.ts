@@ -14,10 +14,10 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
   const blockNumber = event.block.number.toI32();
   const transactionID = event.transaction.hash;
 
-  log.debug("Node: {}, {}, {}", [
+  log.debug("Node in tx - {}: {}, {}", [
+    transactionID.toHexString(),
     node.toHexString(),
-    node.toString(),
-    node.toHex(),
+    node.toBase58(),
   ]);
 
   if (node.toHexString() == MAKER_ENS_NODE) {
