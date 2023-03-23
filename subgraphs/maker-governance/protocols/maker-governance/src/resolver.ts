@@ -40,10 +40,10 @@ export function handleContentHashChanged(event: ContenthashChanged): void {
 
     log.debug("handleContentHashChanged IPFS CID: {}", [ipfCID]);
     // TODO : Decode the content hash
-    IPFSMetadataTemplate.create(
-      "QmQ9hBWwK4CBgXfjDTQFmku3Kwd7Dg2AVGnCbGn6diw2wi"
-    );
-    // IPFSMetadataTemplate.create(ipfCID);
+    // IPFSMetadataTemplate.create(
+    //   "QmQ9hBWwK4CBgXfjDTQFmku3Kwd7Dg2AVGnCbGn6diw2wi"
+    // );
+    IPFSMetadataTemplate.create(ipfCID);
 
     // Fetch the latest content hash from IPFS
     // first we need to get the IPFS hash from the content hash, it is encoded in b58
