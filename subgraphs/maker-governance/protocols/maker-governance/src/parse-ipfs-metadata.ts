@@ -30,38 +30,6 @@ export function handleMetadata(content: Bytes): void {
 
   //const value = json.fromString(mock).toObject();
   if (value) {
-    // Update the tags mapping
-    const tags = (value.get("tags") as JSONValue).toArray();
-
-    tags.forEach((tag) => {
-      const tagObject = tag.toObject();
-      const tagId = (tagObject.get("id") as JSONValue).toString();
-
-      // Check if tag exist
-      let delegateTag = DelegateTags.load(tagId);
-
-      if (!delegateTag) {
-        delegateTag = new DelegateTags(tagId);
-      }
-
-      // Update the delegate tag
-      const shortName = (tagObject.get("shortName") as JSONValue).toString();
-      delegateTag.shortName = shortName;
-
-      // longName
-      const longName = (tagObject.get("longName") as JSONValue).toString();
-      delegateTag.longName = longName;
-
-      // description
-      const description = (
-        tagObject.get("description") as JSONValue
-      ).toString();
-      delegateTag.description = description;
-
-      // Save the delegate tag
-      delegateTag.save();
-    });
-
     // Update voting committees
     const votingCommittees = (
       value.get("votingCommittees") as JSONValue
@@ -202,16 +170,6 @@ export function handleMetadata(content: Bytes): void {
         log.debug("Delegate external profile url: {}", [
           delegateMetadata.externalProfileURL,
         ]);
-
-        let tags: string[] = [];
-
-        (profile.toObject().get("tags") as JSONValue)
-          .toArray()
-          .forEach((tag) => {
-            tags = tags.concat([tag.toString()]);
-          });
-
-        delegateMetadata.tags = tags;
 
         delegateMetadata.coreUnitMember = (
           profile.toObject().get("cuMember") as JSONValue

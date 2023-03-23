@@ -311,8 +311,6 @@ type DelegateMetadata @entity {
   image: String!
   "Delegate external profile URL"
   externalProfileURL: String!
-  "Delegate tags"
-  tags: [DelegateTags!]!
   "Metrics"
   metrics: DelegateMetrics!
   "Core unit member"
@@ -342,11 +340,4 @@ type VotingCommittee @entity {
   image: String
   externalProfileURL: String
   strategies: [VotingStrategy!]!
-}
-
-type DelegateTags @entity {
-  id: String!
-  shortName: String!
-  longName: String!
-  description: String!
 }
