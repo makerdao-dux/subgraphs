@@ -24,7 +24,6 @@ function extractBigDecimal(value: string): BigDecimal {
 }
 
 export function handleMetadata(content: Bytes): void {
-  log.debug("handleMetadata Content: {}", [content.toString()]);
   const value = json.fromBytes(content).toObject();
 
   //const value = json.fromString(mock).toObject();
@@ -64,10 +63,13 @@ export function handleMetadata(content: Bytes): void {
       delegateVotingCommittee.image = image;
 
       // externalProfileURL
-      const externalProfileURL = (
-        votingCommitteeObject.get("externalProfileURL") as JSONValue
-      ).toString();
-      delegateVotingCommittee.externalProfileURL = externalProfileURL;
+      const externalProfileURL = votingCommitteeObject.get(
+        "externalProfileURL"
+      ) as JSONValue;
+
+      delegateVotingCommittee.externalProfileURL = externalProfileURL.isNull()
+        ? ""
+        : externalProfileURL.toString();
 
       // Define the strategies
       const mapStrategies = (
