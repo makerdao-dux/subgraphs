@@ -101,7 +101,7 @@ export function handleMetadata(content: Bytes): void {
         const delegates = (strategyObject.get("delegates") as JSONValue)
           .toArray()
           .map<string>((delegate) => {
-            return delegate.toString();
+            return delegate.toString().toLowerCase();
           });
 
         delegateStrategy.delegates = delegates;
