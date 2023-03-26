@@ -27,6 +27,7 @@ export function handleCreateVoteDelegate(event: CreateVoteDelegate): void {
     delegateInfo.txnHash = event.transaction.hash.toHexString();
     delegateInfo.totalDelegated = BIGINT_ZERO;
     delegateInfo.delegationHistory = [];
+    delegateInfo.metadata = delegateContractAddress.toHexString();
     delegateInfo.save();
   }
 
