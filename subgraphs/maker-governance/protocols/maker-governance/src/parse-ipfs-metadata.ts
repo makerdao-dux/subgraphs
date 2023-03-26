@@ -163,7 +163,7 @@ export function handleMetadata(content: Bytes): void {
       ]);
 
       delegateMetadata.coreUnitMember = (
-        profile.toObject().get("cuMember") as JSONValue
+        delegateDataObject.get("cuMember") as JSONValue
       ).toBool();
 
       log.debug("Before metrics: {}", [""]);
