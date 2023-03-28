@@ -12,7 +12,7 @@ dataSources:
       startBlock: {{ dsChiefContractStartBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Slate
@@ -55,7 +55,7 @@ dataSources:
       startBlock: {{ delegateFactoryStartBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Delegate
@@ -67,6 +67,26 @@ dataSources:
         - event: CreateVoteDelegate(indexed address,indexed address)
           handler: handleCreateVoteDelegate
       file: ./protocols/maker-governance/src/delegate-factory.ts
+  - kind: ethereum/contract
+    name: Resolver
+    network: mainnet
+    source:
+      abi: Resolver
+      startBlock: 16868295
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./protocols/maker-governance/src/resolver.ts
+      entities:
+        - ContenthashChanged
+      abis:
+        - name: Resolver
+          file: ./abis/ens/PublicResolver.json
+      eventHandlers:
+        - event: ContenthashChanged(indexed bytes32,bytes)
+          handler: handleContentHashChanged
+  
   # - kind: ethereum
   #   name: PollingEmitter
   #   network: mainnet
@@ -76,7 +96,7 @@ dataSources:
   #     startBlock: {{ pollingContractStartBlock }}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.5
+  #     apiVersion: 0.0.7
   #     language: wasm/assemblyscript
   #     entities:
   #       - Slate
@@ -102,7 +122,7 @@ dataSources:
   #     startBlock: {{ tokenContractStartBlock }}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.6
+  #     apiVersion: 0.0.7
   #     language: wasm/assemblyscript
   #     entities:
   #       - Slate
@@ -125,7 +145,7 @@ templates:
       abi: DSSpell
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Slate
@@ -150,7 +170,7 @@ templates:
       abi: VoteDelegate
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Slate
@@ -168,3 +188,20 @@ templates:
         - event: Free(indexed address,uint256)
           handler: handleDelegateFree
       file: ./protocols/maker-governance/src/vote-delegate.ts
+  - kind: file/ipfs
+    name: IPFSMetadata
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./protocols/maker-governance/src/parse-ipfs-metadata.ts
+      handler: handleMetadata
+      entities:
+        - Delegate
+        - DelegateMetadata
+        - DelegateMetrics
+        - VotingStrategy
+        - VotingCommittee
+        - DelegateTags
+      abis:
+        - name: Resolver
+          file: ./abis/ens/PublicResolver.json
